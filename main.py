@@ -1,9 +1,6 @@
 import random
 from words import preprocess_words
 
-lives = 25
-answerWord = ""
-
 def get_candidate_word(words):
     rand_indx = random.randint(0,len(words)-1)
     return words[rand_indx]
@@ -36,9 +33,8 @@ def print_game_state(word):
     print()
 
 # Press the green button in the gutter to run the script.
-def check_answer(question, solution, guessedLetter):
+def check_answer(question, solution, guessedLetter, lives):
     #print(f"checkanswer() {question} {solution}")
-    global lives
     q2 = ""
     for i in range(len(question)):
         if question[i] == '_' :
@@ -56,10 +52,11 @@ def check_answer(question, solution, guessedLetter):
     return q2, False
 
 def main_game_loop(word, candidateWord):
+    lives = 5
     while (True):
         print_game_state(word)
         guessedLetter = input("Enter your guessed letter: ")
-        word, isCorrect = check_answer(word, candidateWord, guessedLetter)
+        word, isCorrect = check_answer(word, candidateWord, guessedLetter, lives)
         if isCorrect:
             print("you guessed that right!")
         else:
@@ -71,9 +68,19 @@ def main_game_loop(word, candidateWord):
             print("Too bad, you couldn't save him!")
             break
 
+def check_for_new_game():
+    while (True):
+        playAgain = input("Would you like to play again? \tY/N: ")
+        if playAgain == 'Yes' or playAgain == 'Y' or playAgain == 'yes' or playAgain == 'y':
+            return True
+        else:
+            return False
+
 def start_game():
     question, solution = initialize_game()
     main_game_loop(question, solution)
+    if check_for_new_game():
+        start_game()
 
 if __name__ == '__main__':
     start_game()
