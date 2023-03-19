@@ -8,7 +8,7 @@ def get_candidate_word(words):
     return words[rand_indx]
 
 def initialize_game():
-    print("calling prepareList()")
+    #print("calling prepareList()")
     words = prepare_list("words.txt")
     candidateWord = get_candidate_word(words)
     word = print_word_as_puzzle(candidateWord)
@@ -34,28 +34,7 @@ def print_game_state(word):
         print(word[i], end='', flush=True)
     print()
 
-def printLeaderboard(scores):
-    print("************************")
-    print("LEADERBOARD SCORES")
-    print("************************")
-    for score in scores:
-        print(score[0] + "\t", score[1])
-
-
 # Press the green button in the gutter to run the script.
-def check_for_new_game():
-    while (True):
-        playAgain = input("Would you like to play again? \tY/N: \t\t Leaderboard:L")
-        playAgain.lower()
-        if playAgain == 'yes' or playAgain == 'y':
-            return True
-        elif playAgain.lower() == "l" or playAgain == "leaderboard":
-            scores = leaderboard.get_players()
-            printLeaderboard(scores)
-        else:
-            leaderboard.close_connection()
-            return False
-
 def check_answer(question, solution, guessedLetter, lives):
     #print(f"checkanswer() {question} {solution}")
     q2 = ""
@@ -101,6 +80,25 @@ def main_game_loop(word, candidateWord, playerName):
     leaderboard.add_player(p)
     return maxCorrectAnswer
 
+def check_for_new_game():
+    while (True):
+        playAgain = input("Would you like to play again?\n New game:N\t\t Leaderboard:L\t\t Exit:E ")
+        playAgain.lower()
+        if playAgain == 'yes' or playAgain == 'y' or playAgain == 'n':
+            return True
+        elif playAgain.lower() == "l" or playAgain == "leaderboard":
+            scores = leaderboard.get_players()
+            printLeaderboard(scores)
+        else:
+            leaderboard.close_connection()
+            return False
+
+def printLeaderboard(scores):
+    print("************************")
+    print("LEADERBOARD SCORES")
+    print("************************")
+    for score in scores:
+        print(score[0] + "\t", score[1])
 
 def start_game():
     question, solution = initialize_game()
