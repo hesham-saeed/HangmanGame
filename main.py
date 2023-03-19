@@ -1,21 +1,20 @@
 import random
 import player
 import leaderboard
-from words import preprocess_words
+import words
+import words_hard_level_mysql
 
-def get_candidate_word(words):
-    rand_indx = random.randint(0,len(words)-1)
-    return words[rand_indx]
 
-def initialize_game():
-    #print("calling prepareList()")
-    words = prepare_list("words.txt")
-    candidateWord = get_candidate_word(words)
+def initialize_game(difficulty):
+    candidateWord=""
+    if difficulty == "h": #hard
+        candidateWord=words_hard_level_mysql.get_candidate_word()
+    else:
+        candidateWord = words.get_candidate_word()
     word = print_word_as_puzzle(candidateWord)
     return word, candidateWord
 
-def prepare_list(filename):
-    return preprocess_words(filename)
+
 
 def print_word_as_puzzle(word):
     revealedCharPos = random.randint(0,len(word)-1)
@@ -91,6 +90,7 @@ def check_for_new_game():
             printLeaderboard(scores)
         else:
             leaderboard.close_connection()
+            words_hard_level_mysql.close_connection()
             return False
 
 def printLeaderboard(scores):
@@ -101,8 +101,9 @@ def printLeaderboard(scores):
         print(score[0] + "\t", score[1])
 
 def start_game():
-    question, solution = initialize_game()
     playername = input("Enter your name: ")
+    difficulty = input("Difficulty\t\t Easy:E\t\t Hard:H\t").lower()
+    question, solution = initialize_game(difficulty)
     main_game_loop(question, solution, playername)
     if check_for_new_game():
         start_game()
