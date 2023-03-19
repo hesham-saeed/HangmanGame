@@ -14,5 +14,7 @@ def preprocess_words(filename):
 def read_words_from_file(filename):
     if os.path.isfile(filename):
         with open(filename,"r") as file:
-            return file.read().splitlines()
+            words = file.read().splitlines()
+            filtered_words = [x for x in words if len(x) > 6]
+            return filtered_words
 

@@ -6,7 +6,7 @@ def get_candidate_word(words):
     return words[rand_indx]
 
 def initialize_game():
-    print("calling prepareList()")
+    #print("calling prepareList()")
     words = prepare_list("words.txt")
     candidateWord = get_candidate_word(words)
     word = print_word_as_puzzle(candidateWord)
@@ -32,7 +32,6 @@ def print_game_state(word):
         print(word[i], end='', flush=True)
     print()
 
-# Press the green button in the gutter to run the script.
 def check_answer(question, solution, guessedLetter, lives):
     #print(f"checkanswer() {question} {solution}")
     q2 = ""
@@ -42,25 +41,26 @@ def check_answer(question, solution, guessedLetter, lives):
                 #question[i] = guessedLetter
                 q2 += guessedLetter
                 q2 += question[i+1:]
-                return q2, True
+                return q2, True, lives
             else:
                 q2 += "_"
         else:
             q2 += question[i]
 
     lives -= 1
-    return q2, False
+    return q2, False, lives
 
 def main_game_loop(word, candidateWord):
-    lives = 5
+    lives = 6
     while (True):
         print_game_state(word)
         guessedLetter = input("Enter your guessed letter: ")
-        word, isCorrect = check_answer(word, candidateWord, guessedLetter, lives)
+        word, isCorrect, lives = check_answer(word, candidateWord, guessedLetter, lives)
         if isCorrect:
             print("you guessed that right!")
         else:
-            print("wrong guess!")
+            print(f"wrong guess! lives remaining: {lives}")
+            print(print_hangman_stages(lives))
         if word.find("_") == -1:
             print("Well done, you saved the man!")
             break
@@ -75,6 +75,67 @@ def check_for_new_game():
             return True
         else:
             return False
+
+def print_hangman_stages(lives):
+    stages = [ """
+                    ---------
+                    |       |
+                    |       o
+                    |      \\|/
+                    |       |
+                    |      / \\
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       o
+                    |      \\|/
+                    |       |
+                    |      / 
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       o
+                    |      \\|/
+                    |       |
+                    |      
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       o
+                    |      \\|
+                    |       |  
+                    |      
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       o
+                    |       |
+                    |       |
+                    |      
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       o
+                    |       
+                    |       
+                    |      
+                    -
+                ""","""
+                    ---------
+                    |       |
+                    |       
+                    |      
+                    |       
+                    |      
+                    -
+                """
+    ]
+    return stages[lives]
 
 def start_game():
     question, solution = initialize_game()
