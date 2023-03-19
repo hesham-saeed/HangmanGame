@@ -1,4 +1,6 @@
 import os.path
+import random as rand
+
 def preprocess_words(filename):
     return read_words_from_file(filename)
     #print(words_list[0])
@@ -16,3 +18,10 @@ def read_words_from_file(filename):
         with open(filename,"r") as file:
             return file.read().splitlines()
 
+def prepare_list(filename):
+    return preprocess_words(filename)
+
+def get_candidate_word():
+    words = prepare_list("words.txt")
+    rand_indx = rand.randint(0,len(words)-1)
+    return words[rand_indx]
